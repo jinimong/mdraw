@@ -1,11 +1,14 @@
 import { useState, useEffect, useCallback } from 'react'
-import { decodeMarkdownFromHash, isEditMode, encodeMarkdownToBase64 } from './utils/url'
+import { decodeMarkdownFromHash, isEditMode, encodeMarkdownToBase64, copyShareUrlToClipboard } from './utils/url'
 import MarkdownViewer from './components/MarkdownViewer'
+import MarkdownEditor from './components/MarkdownEditor'
+import Toolbar from './components/Toolbar'
 import './App.css'
 
 function App() {
   const [markdown, setMarkdown] = useState<string>(() => decodeMarkdownFromHash())
   const [editMode, setEditMode] = useState<boolean>(() => isEditMode())
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'error'>('idle')
 
   // 해시 변경 감지 (브라우저 뒤로가기 등)
   useEffect(() => {
@@ -41,32 +44,22 @@ function App() {
     )
   }, [editMode])
 
+  const handleCopyUrl = useCallback(async () => {
+    const ok = await copyShareUrlToClipboard(markdown)
+    setCopyStatus(ok ? 'copied' : 'error')
+    setTimeout(() => setCopyStatus('idle'), 2000)
+  }, [markdown])
+
   return (
     <div className="app">
-      <div className="toolbar">
-        <h1 className="logo">mdraw</h1>
-        <div className="toolbar-actions">
-          <button type="button" className="btn" onClick={toggleEditMode}>
-            {editMode ? '👁️ 뷰어로' : '✏️ 수정모드'}
-          </button>
-        </div>
-      </div>
-
+      <Toolbar
+        isEditing={editMode}
+        onToggleEdit={toggleEditMode}
+        onCopyUrl={handleCopyUrl}
+        copyStatus={copyStatus}
+      />
       {editMode ? (
-        <div className="editor-layout">
-          <div className="editor-pane">
-            <textarea
-              className="editor-textarea"
-              value={markdown}
-              onChange={(e) => handleMarkdownChange(e.target.value)}
-              placeholder="여기에 마크다운을 입력하세요..."
-              autoFocus
-            />
-          </div>
-          <div className="preview-pane">
-            <MarkdownViewer content={markdown} />
-          </div>
-        </div>
+        <MarkdownEditor content={markdown} onChange={handleMarkdownChange} />
       ) : (
         <div className="viewer-container">
           <MarkdownViewer content={markdown} />
