@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { decodeMarkdownFromHash, isEditMode, encodeMarkdownToBase64 } from './utils/url'
+import MarkdownViewer from './components/MarkdownViewer'
 import './App.css'
 
 function App() {
@@ -63,16 +64,12 @@ function App() {
             />
           </div>
           <div className="preview-pane">
-            <div className="markdown-body">
-              <pre>{markdown}</pre>
-            </div>
+            <MarkdownViewer content={markdown} />
           </div>
         </div>
       ) : (
         <div className="viewer-container">
-          <div className="markdown-body">
-            <pre>{markdown}</pre>
-          </div>
+          <MarkdownViewer content={markdown} />
         </div>
       )}
     </div>
