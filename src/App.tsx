@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { decodeMarkdownFromHash, isEditMode, encodeMarkdownToBase64, copyShareUrlToClipboard } from './utils/url'
+import { decodeMarkdownFromHash, isEditMode, copyShareUrlToClipboard, encodeMarkdownToHash } from './utils/url'
 import MarkdownViewer from './components/MarkdownViewer'
 import MarkdownEditor from './components/MarkdownEditor'
 import Toolbar from './components/Toolbar'
@@ -24,7 +24,7 @@ function App() {
   // 에디터에서 입력 시 해시 업데이트
   const handleMarkdownChange = useCallback((value: string) => {
     setMarkdown(value)
-    window.history.replaceState(null, '', `#${encodeMarkdownToBase64(value)}`)
+    window.history.replaceState(null, '', `#${encodeMarkdownToHash(value)}`)
   }, [])
 
   const toggleEditMode = useCallback(() => {
