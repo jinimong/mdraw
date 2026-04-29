@@ -71,6 +71,17 @@ body {
   align-self: center;
 }
 
+.toolbar-hint-dirty {
+  color: #d29922;
+  font-weight: 500;
+}
+
+@media (prefers-color-scheme: dark) {
+  .toolbar-hint-dirty {
+    color: #e3b341;
+  }
+}
+
 .btn {
   padding: 6px 12px;
   border: 1px solid var(--border);

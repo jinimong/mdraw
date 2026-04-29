@@ -62,7 +62,6 @@ export default function MermaidDiagram({ chart }: Props) {
   if (error) {
     return (
       <div className="mermaid-error">
-        <p>⚠️ Mermaid 문법 오류</p>
         <pre>{error}</pre>
       </div>
     )

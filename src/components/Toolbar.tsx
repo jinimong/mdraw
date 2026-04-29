@@ -3,18 +3,19 @@ interface ToolbarProps {
   onToggleEdit: () => void
   onCopyUrl: () => void
   copyStatus: 'idle' | 'copied' | 'error'
+  isDirty: boolean
 }
 
-export default function Toolbar({ isEditing, onToggleEdit, onCopyUrl, copyStatus }: ToolbarProps) {
+export default function Toolbar({ isEditing, onToggleEdit, onCopyUrl, copyStatus, isDirty }: ToolbarProps) {
   return (
     <div className="toolbar">
       <h1 className="logo">
         <a href={window.location.pathname}>mdraw</a>
       </h1>
       <div className="toolbar-actions">
-        {isEditing && (
-          <span className="toolbar-hint">
-            ※ 수정 후 링크를 복사하여 다시 공유하세요
+        {isEditing && isDirty && (
+          <span className="toolbar-hint toolbar-hint-dirty">
+            ⚠️ 수정됨 — 다시 링크 복사 필요
           </span>
         )}
         <button

@@ -23,19 +23,12 @@ export default function MarkdownEditor({ content, onChange }: MarkdownEditorProp
     input.click()
   }
 
-  const handleClear = () => {
-    onChange('')
-  }
-
   return (
     <div className="editor-layout">
       <div className="editor-pane">
         <div className="editor-pane-header">
           <button type="button" className="btn btn-sm" onClick={handleFileUpload}>
             📁 파일 열기
-          </button>
-          <button type="button" className="btn btn-sm" onClick={handleClear}>
-            🗑️ 초기화
           </button>
         </div>
         <textarea

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { decodeMarkdownFromHash, isEditMode, copyShareUrlToClipboard, encodeMarkdownToHash } from './utils/url'
 import MarkdownViewer from './components/MarkdownViewer'
 import MarkdownEditor from './components/MarkdownEditor'
@@ -10,11 +10,16 @@ function App() {
   const [editMode, setEditMode] = useState<boolean>(() => isEditMode())
   const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'error'>('idle')
 
+  // 마지막으로 복사한 내용 추적
+  const lastCopiedRef = useRef<string>(markdown)
+  const isDirty = markdown !== lastCopiedRef.current
+
   // 해시 변경 감지 (브라우저 뒤로가기 등)
   useEffect(() => {
     const handleHashChange = () => {
       const content = decodeMarkdownFromHash()
       setMarkdown(content)
+      lastCopiedRef.current = content
       if (!content) setEditMode(true)
     }
     window.addEventListener('hashchange', handleHashChange)
@@ -47,6 +52,7 @@ function App() {
   const handleCopyUrl = useCallback(async () => {
     const ok = await copyShareUrlToClipboard(markdown)
     setCopyStatus(ok ? 'copied' : 'error')
+    if (ok) lastCopiedRef.current = markdown
     setTimeout(() => setCopyStatus('idle'), 2000)
   }, [markdown])
 
@@ -57,6 +63,7 @@ function App() {
         onToggleEdit={toggleEditMode}
         onCopyUrl={handleCopyUrl}
         copyStatus={copyStatus}
+        isDirty={isDirty}
       />
       {editMode ? (
         <MarkdownEditor content={markdown} onChange={handleMarkdownChange} />
