@@ -34,7 +34,7 @@ export default function MarkdownViewer({ content }: MarkdownViewerProps) {
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[
-          rehypeSanitize(sanitizeSchema),
+          [rehypeSanitize, sanitizeSchema],
           rehypeHighlight,
           rehypeKatex,
         ]}

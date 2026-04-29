@@ -1,73 +1,57 @@
-# React + TypeScript + Vite
+# mdraw
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> 상남자식 마크다운 공유 — URL에 마크다운을 담아 공유하는 클라이언트 사이드 뷰어/에디터
 
-Currently, two official plugins are available:
+## 소개
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+mdraw는 서버나 데이터베이스 없이, 마크다운 콘텐츠를 URL 해시 프래그먼트에 base64로 인코딩하여 공유하는 도구입니다.
 
-## React Compiler
+- 🔗 **URL이 곧 문서** — 링크 하나로 마크다운을 공유
+- 👁️ **GitHub 스타일 렌더링** — README와 동일한 스타일
+- ✏️ **인라인 에디터** — 수정 후 바로 공유 가능
+- 🌙 **다크모드** — 시스템 설정 자동 감지
+- 🛡️ **XSS 방어** — rehype-sanitize로 안전한 렌더링
+- 📐 **LaTeX 수식** — `$E=mc^2$`, `$$\sum_{i=1}^{n}$$` 지원
+- 🎨 **코드 하이라이팅** — 다양한 언어 지원
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 사용법
 
-## Expanding the ESLint configuration
+1. [mdraw 페이지](https://jinimong.github.io/mdraw/) 접속
+2. 에디터에 마크다운 작성
+3. **🔗 링크 복사** 버튼 클릭
+4. 복사된 URL을 공유
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+공유받은 사람은 URL만 열면 바로 렌더링된 마크다운을 볼 수 있습니다.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 기술 스택
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+| 역할 | 기술 |
+|------|------|
+| 프레임워크 | React + TypeScript |
+| 빌드 | Vite |
+| 마크다운 렌더링 | react-markdown + remark-gfm + remark-math |
+| 코드 하이라이팅 | rehype-highlight (highlight.js) |
+| LaTeX 수식 | rehype-katex |
+| XSS 방어 | rehype-sanitize |
+| 스타일 | github-markdown-css |
+| 호스팅 | GitHub Pages |
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 개발
+
+```bash
+# 설치
+npm install
+
+# 개발 서버
+npm run dev
+
+# 빌드
+npm run build
+
+# 타입 체크
+npx tsc --noEmit
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 라이선스
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+MIT
