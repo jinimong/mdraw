@@ -3,7 +3,9 @@ import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
 import rehypeHighlight from 'rehype-highlight'
 import rehypeKatex from 'rehype-katex'
+import rehypeSanitize from 'rehype-sanitize'
 import { useTheme } from '../hooks/useTheme'
+import { sanitizeSchema } from '../utils/sanitize'
 import 'github-markdown-css/github-markdown-light.css'
 import 'github-markdown-css/github-markdown-dark.css'
 import 'katex/dist/katex.min.css'
@@ -31,7 +33,11 @@ export default function MarkdownViewer({ content }: MarkdownViewerProps) {
     >
       <ReactMarkdown
         remarkPlugins={[remarkGfm, remarkMath]}
-        rehypePlugins={[rehypeHighlight, rehypeKatex]}
+        rehypePlugins={[
+          rehypeSanitize(sanitizeSchema),
+          rehypeHighlight,
+          rehypeKatex,
+        ]}
       >
         {content}
       </ReactMarkdown>
