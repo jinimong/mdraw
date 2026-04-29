@@ -146,3 +146,45 @@ body {
   max-width: 980px;
   margin: 0 auto;
 }
+
+/* Mermaid 다이어그램 */
+.mermaid-diagram {
+  margin: 16px 0;
+  padding: 16px;
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow-x: auto;
+  text-align: center;
+}
+
+.mermaid-diagram svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.mermaid-error {
+  margin: 16px 0;
+  padding: 12px 16px;
+  background-color: #fdd;
+  border: 1px solid #f99;
+  border-radius: 6px;
+  color: #900;
+  font-size: 13px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .mermaid-error {
+    background-color: #3d1111;
+    border-color: #662222;
+    color: #ff8888;
+  }
+}
+
+.mermaid-loading {
+  margin: 16px 0;
+  padding: 16px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 13px;
+}
