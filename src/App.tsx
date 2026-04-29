@@ -1,121 +1,81 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
+import { useState, useEffect, useCallback } from 'react'
+import { decodeMarkdownFromHash, isEditMode, encodeMarkdownToBase64 } from './utils/url'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [markdown, setMarkdown] = useState<string>(() => decodeMarkdownFromHash())
+  const [editMode, setEditMode] = useState<boolean>(() => isEditMode())
+
+  // 해시 변경 감지 (브라우저 뒤로가기 등)
+  useEffect(() => {
+    const handleHashChange = () => {
+      const content = decodeMarkdownFromHash()
+      setMarkdown(content)
+      if (!content) setEditMode(true)
+    }
+    window.addEventListener('hashchange', handleHashChange)
+    return () => window.removeEventListener('hashchange', handleHashChange)
+  }, [])
+
+  // 에디터에서 입력 시 해시 업데이트
+  const handleMarkdownChange = useCallback((value: string) => {
+    setMarkdown(value)
+    window.history.replaceState(null, '', `#${encodeMarkdownToBase64(value)}`)
+  }, [])
+
+  const toggleEditMode = useCallback(() => {
+    const newMode = !editMode
+    setEditMode(newMode)
+    const params = new URLSearchParams(window.location.search)
+    if (newMode) {
+      params.set('edit', 'true')
+    } else {
+      params.delete('edit')
+    }
+    const newSearch = params.toString()
+    window.history.replaceState(
+      null,
+      '',
+      window.location.pathname + (newSearch ? `?${newSearch}` : '') + window.location.hash
+    )
+  }, [editMode])
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
+    <div className="app">
+      <div className="toolbar">
+        <h1 className="logo">mdraw</h1>
+        <div className="toolbar-actions">
+          <button type="button" className="btn" onClick={toggleEditMode}>
+            {editMode ? '👁️ 뷰어로' : '✏️ 수정모드'}
+          </button>
         </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      </div>
 
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+      {editMode ? (
+        <div className="editor-layout">
+          <div className="editor-pane">
+            <textarea
+              className="editor-textarea"
+              value={markdown}
+              onChange={(e) => handleMarkdownChange(e.target.value)}
+              placeholder="여기에 마크다운을 입력하세요..."
+              autoFocus
+            />
+          </div>
+          <div className="preview-pane">
+            <div className="markdown-body">
+              <pre>{markdown}</pre>
+            </div>
+          </div>
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
+      ) : (
+        <div className="viewer-container">
+          <div className="markdown-body">
+            <pre>{markdown}</pre>
+          </div>
         </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+      )}
+    </div>
   )
 }
 
