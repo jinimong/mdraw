@@ -11,8 +11,11 @@ import LZString from 'lz-string'
  * 2. 순수 base64 (레거시) — 기존 공유 URL
  */
 export function decodeMarkdownFromHash(): string {
-  const hash = window.location.hash.slice(1); // '#' 제거
-  if (!hash) return '';
+  const raw = window.location.hash.slice(1); // '#' 제거
+  if (!raw) return '';
+
+  // 브라우저가 해시를 URL 인코딩할 수 있으므로 디코딩
+  const hash = decodeURIComponent(raw);
 
   // LZ-string URI Safe 포맷 (접두사 ⌁)
   if (hash.startsWith('\u2301')) {
