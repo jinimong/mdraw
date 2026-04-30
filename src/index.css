@@ -208,6 +208,8 @@ body {
  */
 [data-color-mode="light"] .markdown-body {
   color-scheme: light;
+  color: #1f2328;
+  background-color: #ffffff;
 }
 [data-color-mode="light"] .markdown-body,
 [data-color-mode="light"] .markdown-body h1,
@@ -249,6 +251,8 @@ body {
 
 [data-color-mode="dark"] .markdown-body {
   color-scheme: dark;
+  color: #e6edf3;
+  background-color: #0d1117;
 }
 [data-color-mode="dark"] .markdown-body,
 [data-color-mode="dark"] .markdown-body h1,
