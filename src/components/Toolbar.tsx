@@ -10,7 +10,7 @@ export default function Toolbar({ isEditing, onToggleEdit, onCopyUrl, copyStatus
   return (
     <div className="toolbar">
       <h1 className="logo">
-        <a href={window.location.pathname}>mdraw</a>
+        <a href={window.location.pathname}>raw-md</a>
       </h1>
       <div className="toolbar-actions">
         {isEditing && isDirty && (
