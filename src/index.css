@@ -3,7 +3,8 @@
 @import "@primer/primitives/dist/css/functional/themes/dark.css";
 
 #root {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 * {
   margin: 0;
@@ -29,9 +30,10 @@ body {
 }
 
 .app {
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 /* 툴바 */
@@ -198,6 +200,95 @@ body {
   max-width: 980px;
   margin: 0 auto;
   padding: 0 45px;
+}
+
+/*
+ * github-markdown-css auto 버전은 @media (prefers-color-scheme)을 사용.
+ * 우리의 data-color-mode 토글이 항상 우선되도록 오버라이드.
+ */
+[data-color-mode="light"] .markdown-body {
+  color-scheme: light;
+}
+[data-color-mode="light"] .markdown-body,
+[data-color-mode="light"] .markdown-body h1,
+[data-color-mode="light"] .markdown-body h2,
+[data-color-mode="light"] .markdown-body h3,
+[data-color-mode="light"] .markdown-body h4,
+[data-color-mode="light"] .markdown-body h5,
+[data-color-mode="light"] .markdown-body h6 {
+  color: #1f2328;
+}
+[data-color-mode="light"] .markdown-body a {
+  color: #0969da;
+}
+[data-color-mode="light"] .markdown-body code {
+  background-color: rgba(175, 184, 193, 0.2);
+}
+[data-color-mode="light"] .markdown-body blockquote {
+  color: #656d76;
+  border-left-color: #d1d9e0;
+}
+[data-color-mode="light"] .markdown-body table th,
+[data-color-mode="light"] .markdown-body table td {
+  border-color: #d1d9e0;
+}
+[data-color-mode="light"] .markdown-body table tr {
+  background-color: #ffffff;
+  border-color: #d1d9e0;
+}
+[data-color-mode="light"] .markdown-body table tr:nth-child(2n) {
+  background-color: #f6f8fa;
+}
+[data-color-mode="light"] .markdown-body hr {
+  background-color: #d1d9e0;
+  border-color: #d1d9e0;
+}
+[data-color-mode="light"] .markdown-body img {
+  background-color: #ffffff;
+}
+
+[data-color-mode="dark"] .markdown-body {
+  color-scheme: dark;
+}
+[data-color-mode="dark"] .markdown-body,
+[data-color-mode="dark"] .markdown-body h1,
+[data-color-mode="dark"] .markdown-body h2,
+[data-color-mode="dark"] .markdown-body h3,
+[data-color-mode="dark"] .markdown-body h4,
+[data-color-mode="dark"] .markdown-body h5,
+[data-color-mode="dark"] .markdown-body h6 {
+  color: #f0f6fc;
+}
+[data-color-mode="dark"] .markdown-body a {
+  color: #4493f8;
+}
+[data-color-mode="dark"] .markdown-body code {
+  background-color: rgba(110, 118, 129, 0.4);
+}
+[data-color-mode="dark"] .markdown-body blockquote {
+  color: #8b949e;
+  border-left-color: #3d444d;
+}
+[data-color-mode="dark"] .markdown-body table th,
+[data-color-mode="dark"] .markdown-body table td {
+  border-color: #3d444d;
+}
+[data-color-mode="dark"] .markdown-body table tr {
+  background-color: #0d1117;
+  border-color: #3d444d;
+}
+[data-color-mode="dark"] .markdown-body table tr:nth-child(2n) {
+  background-color: #151b23;
+}
+[data-color-mode="dark"] .markdown-body hr {
+  background-color: #3d444d;
+  border-color: #3d444d;
+}
+
+/* highlight.js 라이트모드 — github-markdown-css가 덮어쓰는 현상 방지 */
+[data-color-mode="light"] .markdown-body pre code.hljs {
+  background-color: #f6f8fa;
+  color: #1f2328;
 }
 
 /* ========== 반응형 — 모바일 (≤768px) ========== */
